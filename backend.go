@@ -3,6 +3,7 @@ package vault_plugin_secrets_scalr
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"strings"
 	"sync"
 
@@ -94,6 +95,14 @@ func (b *scalrBackend) getClient(ctx context.Context, s logical.Storage) (*scalr
 	}
 
 	hostname := strings.TrimSuffix(strings.ToLower(config.Hostname), "/")
+	parsed, err := url.Parse(hostname)
+	if err != nil {
+		return nil, fmt.Errorf("error parsing hostname %q: %w", hostname, err)
+	}
+
+	if parsed.Scheme == "" {
+		hostname = "https://" + hostname
+	}
 
 	scalrConfig := scalr.DefaultConfig()
 	scalrConfig.Address = hostname
