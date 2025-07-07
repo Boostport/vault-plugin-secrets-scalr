@@ -1,0 +1,34 @@
+version: 2
+builds:
+  - main: ./cmd/vault-plugin-secrets-scalr
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+
+gomod:
+  proxy: true
+
+archives:
+  - formats:
+    - binary
+
+checksum:
+  algorithm: sha256
+
+signs:
+  - cmd: cosign
+    certificate: "${artifact}.pem"
+    output: true
+    artifacts: checksum
+    args:
+      - sign-blob
+      - "--output-certificate=${certificate}"
+      - "--output-signature=${signature}"
+      - "${artifact}"
+      - --yes

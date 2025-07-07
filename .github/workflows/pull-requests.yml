@@ -1,0 +1,32 @@
+name: Pull Requests
+on:
+  pull_request_target:
+
+jobs:
+  approve-pr-tests:
+    runs-on: ubuntu-latest
+    environment:
+      name: "Pull Request Tests"
+    steps:
+      - run: "echo 'Execution of tests pending approval'"
+
+  test:
+    needs: ["approve-pr-tests"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set environment variables from .env
+        uses: xom9ikk/dotenv@v2.3.0
+      - name: Setup go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      - name: Run tests
+        run: go test -v ./...
+        env:
+          VAULT_ACC: '1'
+          TEST_SCALR_HOSTNAME: ${{ secrets.TEST_SCALR_HOSTNAME }}
+          TEST_SCALR_ACCOUNT_ID: ${{ secrets.TEST_SCALR_ACCOUNT_ID }}
+          TEST_SCALR_TOKEN: ${{ secrets.TEST_SCALR_TOKEN }}

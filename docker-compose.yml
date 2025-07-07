@@ -1,0 +1,13 @@
+services:
+  test:
+    image: golang:${GO_VERSION}
+    working_dir: /source
+    command: go test -v ./...
+    environment:
+      - VAULT_ACC=${VAULT_ACC}
+      - TEST_SCALR_HOSTNAME=${TEST_SCALR_HOSTNAME}
+      - TEST_SCALR_TOKEN=${TEST_SCALR_TOKEN}
+      - TEST_SCALR_ACCOUNT_ID=${TEST_SCALR_ACCOUNT_ID}
+    volumes:
+      - .:/source
+      - $GOPATH/pkg/mod/cache:/go/pkg/mod/cache
