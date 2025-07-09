@@ -53,8 +53,12 @@ $ vault read scalr/creds/example
 
 ### Required Permissions for Service Account:
 - `accounts:set-access-policies`
+- `environments:read`
+- `environments:set-access-policies`
 - `roles:*`
 - `service-accounts:*`
+- `workspaces:read`
+- `workspaces:set-access-policies`
 
 ## Role Configuration
 | Parameter         | Description                                                                                                                | Required | Default  |
