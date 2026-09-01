@@ -20,7 +20,7 @@ const (
 func TestRole(t *testing.T) {
 	b, s := getTestBackend(t)
 
-	err := testConfigCreate(b, s, map[string]interface{}{
+	err := testConfigCreate(b, s, map[string]any{
 		"hostname":   hostname,
 		"account_id": accountID,
 		"token":      token,
@@ -31,7 +31,7 @@ func TestRole(t *testing.T) {
 		for i := 1; i <= 10; i++ {
 			_, err := testTokenRoleCreate(t, b, s,
 				testRoleName+strconv.Itoa(i),
-				map[string]interface{}{
+				map[string]any{
 					"access_policies": testAccessPolicies,
 					"ttl":             testTTL,
 					"max_ttl":         testMaxTTL,
@@ -45,7 +45,7 @@ func TestRole(t *testing.T) {
 	})
 
 	t.Run("Create User Role - pass", func(t *testing.T) {
-		resp, err := testTokenRoleCreate(t, b, s, testRoleName, map[string]interface{}{
+		resp, err := testTokenRoleCreate(t, b, s, testRoleName, map[string]any{
 			"access_policies": testAccessPolicies,
 			"ttl":             testTTL,
 			"max_ttl":         testMaxTTL,
@@ -57,13 +57,13 @@ func TestRole(t *testing.T) {
 	})
 
 	t.Run("Create User Role - fail on invalid access policies", func(t *testing.T) {
-		typeValues := map[string]interface{}{
+		typeValues := map[string]any{
 			"Empty policies": "",
 			"Invalid JSON":   "[Invalid JSON",
 		}
 		for d, v := range typeValues {
 			t.Run(d, func(t *testing.T) {
-				resp, err := testTokenRoleCreate(t, b, s, testRoleName, map[string]interface{}{
+				resp, err := testTokenRoleCreate(t, b, s, testRoleName, map[string]any{
 					"access_policies": v,
 					"ttl":             testTTL,
 					"max_ttl":         testMaxTTL,
@@ -93,7 +93,7 @@ func TestRole(t *testing.T) {
 	})
 
 	t.Run("Update User Role", func(t *testing.T) {
-		resp, err := testTokenRoleUpdate(t, b, s, testRoleName, map[string]interface{}{
+		resp, err := testTokenRoleUpdate(t, b, s, testRoleName, map[string]any{
 			"ttl":     "1m",
 			"max_ttl": "5h",
 		})
@@ -120,7 +120,7 @@ func TestRole(t *testing.T) {
 }
 
 // Utility function to create a role while, returning any response (including errors).
-func testTokenRoleCreate(t *testing.T, b *scalrBackend, s logical.Storage, roleName string, d map[string]interface{}) (*logical.Response, error) {
+func testTokenRoleCreate(t *testing.T, b *scalrBackend, s logical.Storage, roleName string, d map[string]any) (*logical.Response, error) {
 	t.Helper()
 	resp, err := b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.CreateOperation,
@@ -136,7 +136,7 @@ func testTokenRoleCreate(t *testing.T, b *scalrBackend, s logical.Storage, roleN
 }
 
 // Utility function to update a role while, returning any response (including errors).
-func testTokenRoleUpdate(t *testing.T, b *scalrBackend, s logical.Storage, roleName string, d map[string]interface{}) (*logical.Response, error) {
+func testTokenRoleUpdate(t *testing.T, b *scalrBackend, s logical.Storage, roleName string, d map[string]any) (*logical.Response, error) {
 	t.Helper()
 	resp, err := b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.UpdateOperation,

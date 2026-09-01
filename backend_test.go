@@ -66,7 +66,7 @@ func (e *testEnv) AddConfig(t *testing.T) {
 		Operation: logical.CreateOperation,
 		Path:      "config",
 		Storage:   e.Storage,
-		Data: map[string]interface{}{
+		Data: map[string]any{
 			"hostname":   e.Hostname,
 			"account_id": e.AccountID,
 			"token":      e.Token,
@@ -83,7 +83,7 @@ func (e *testEnv) AddRole(t *testing.T) {
 		Operation: logical.UpdateOperation,
 		Path:      "roles/test-role",
 		Storage:   e.Storage,
-		Data: map[string]interface{}{
+		Data: map[string]any{
 			"access_policies": fmt.Sprintf(`[{"scopeID": "%s", "roleIDs": [], "permissions": ["environments:*", "workspaces:*"]}]`, e.AccountID),
 		},
 	}

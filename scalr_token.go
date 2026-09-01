@@ -45,7 +45,7 @@ func (b *scalrBackend) tokenRevoke(ctx context.Context, req *logical.Request, _ 
 	}
 
 	var roleIDs []string
-	for _, roleID := range req.Secret.InternalData["role_ids"].([]interface{}) {
+	for _, roleID := range req.Secret.InternalData["role_ids"].([]any) {
 		roleIDs = append(roleIDs, roleID.(string))
 	}
 

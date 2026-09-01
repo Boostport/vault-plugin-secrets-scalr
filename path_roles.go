@@ -53,8 +53,8 @@ func (r *scalrRoleEntry) validate() error {
 	return nil
 }
 
-func (r *scalrRoleEntry) toResponseData() map[string]interface{} {
-	respData := map[string]interface{}{
+func (r *scalrRoleEntry) toResponseData() map[string]any {
+	respData := map[string]any{
 		"access_policies": r.AccessPolicies,
 		"ttl":             r.TTL.Seconds(),
 		"max_ttl":         r.MaxTTL.Seconds(),

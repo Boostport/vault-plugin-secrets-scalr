@@ -63,10 +63,10 @@ func (b *scalrBackend) createUserCreds(ctx context.Context, req *logical.Request
 	// The response is divided into two objects (1) internal data and (2) data.
 	// If you want to reference any information in your code, you need to
 	// store it in internal data!
-	resp := b.Secret(scalrTokenType).Response(map[string]interface{}{
+	resp := b.Secret(scalrTokenType).Response(map[string]any{
 		"account_id": token.AccountID,
 		"token":      token.Token,
-	}, map[string]interface{}{
+	}, map[string]any{
 		"service_account_id": token.ServiceAccountID,
 		"role_ids":           token.RoleIDs,
 		"vault_role":         roleName,
@@ -101,8 +101,8 @@ func createServiceAccountToken(c *scalr.Client, accountID string, roleEntry *sca
 	serviceAccountName := fmt.Sprintf("vault-%s", uuid.New())
 
 	serviceAccount, err := c.ServiceAccounts.Create(context.Background(), scalr.ServiceAccountCreateOptions{
-		Name:        scalr.String(serviceAccountName),
-		Description: scalr.String("Service account created by Vault Scalr secrets plugin"),
+		Name:        new(serviceAccountName),
+		Description: new("Service account created by Vault Scalr secrets plugin"),
 		Account:     &scalr.Account{ID: accountID},
 	})
 
@@ -130,8 +130,8 @@ func createServiceAccountToken(c *scalr.Client, accountID string, roleEntry *sca
 			}
 
 			role, err := c.Roles.Create(context.Background(), scalr.RoleCreateOptions{
-				Name:        scalr.String(roleName),
-				Description: scalr.String("Role created by Vault Scalr secrets plugin"),
+				Name:        new(roleName),
+				Description: new("Role created by Vault Scalr secrets plugin"),
 				Permissions: permissions,
 			})
 
@@ -196,7 +196,7 @@ func createServiceAccountToken(c *scalr.Client, accountID string, roleEntry *sca
 	}
 
 	accessToken, err := c.ServiceAccountTokens.Create(context.Background(), serviceAccount.ID, scalr.AccessTokenCreateOptions{
-		Description: scalr.String("Token created by Vault Scalr secrets plugin"),
+		Description: new("Token created by Vault Scalr secrets plugin"),
 	})
 
 	if err != nil {

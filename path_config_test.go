@@ -21,7 +21,7 @@ func TestConfig(t *testing.T) {
 	t.Run("Test Configuration", func(t *testing.T) {
 
 		t.Run("Create Configuration - empty token", func(t *testing.T) {
-			err := testConfigCreate(b, reqStorage, map[string]interface{}{
+			err := testConfigCreate(b, reqStorage, map[string]any{
 				"hostname":   hostname,
 				"account_id": accountID,
 				"token":      "",
@@ -30,7 +30,7 @@ func TestConfig(t *testing.T) {
 		})
 
 		t.Run("Create Configuration - empty account id", func(t *testing.T) {
-			err := testConfigCreate(b, reqStorage, map[string]interface{}{
+			err := testConfigCreate(b, reqStorage, map[string]any{
 				"hostname":   hostname,
 				"account_id": "",
 				"token":      token,
@@ -39,7 +39,7 @@ func TestConfig(t *testing.T) {
 		})
 
 		t.Run("Create Configuration - empty hostname", func(t *testing.T) {
-			err := testConfigCreate(b, reqStorage, map[string]interface{}{
+			err := testConfigCreate(b, reqStorage, map[string]any{
 				"hostname":   "",
 				"account_id": accountID,
 				"token":      token,
@@ -48,7 +48,7 @@ func TestConfig(t *testing.T) {
 		})
 
 		t.Run("Create Configuration - pass", func(t *testing.T) {
-			err := testConfigCreate(b, reqStorage, map[string]interface{}{
+			err := testConfigCreate(b, reqStorage, map[string]any{
 				"hostname":   hostname,
 				"account_id": accountID,
 				"token":      token,
@@ -57,7 +57,7 @@ func TestConfig(t *testing.T) {
 		})
 
 		t.Run("Read Configuration - pass", func(t *testing.T) {
-			err := testConfigRead(b, reqStorage, map[string]interface{}{
+			err := testConfigRead(b, reqStorage, map[string]any{
 				"hostname":   hostname,
 				"account_id": accountID,
 			})
@@ -65,14 +65,14 @@ func TestConfig(t *testing.T) {
 		})
 
 		t.Run("Update Configuration - set token - pass", func(t *testing.T) {
-			err := testConfigUpdate(b, reqStorage, map[string]interface{}{
+			err := testConfigUpdate(b, reqStorage, map[string]any{
 				"token": "abcabcabc",
 			})
 			assert.NoError(t, err)
 		})
 
 		t.Run("Read Updated Configuration - set token - pass", func(t *testing.T) {
-			err := testConfigRead(b, reqStorage, map[string]interface{}{
+			err := testConfigRead(b, reqStorage, map[string]any{
 				"hostname":   hostname,
 				"account_id": accountID,
 			})
@@ -80,7 +80,7 @@ func TestConfig(t *testing.T) {
 		})
 
 		t.Run("Update Configuration - set account id - pass", func(t *testing.T) {
-			err := testConfigUpdate(b, reqStorage, map[string]interface{}{
+			err := testConfigUpdate(b, reqStorage, map[string]any{
 				"hostname":   hostname,
 				"account_id": "acc-abcabc",
 				"token":      "abcabcabc",
@@ -89,7 +89,7 @@ func TestConfig(t *testing.T) {
 		})
 
 		t.Run("Read Updated Configuration - set account id - pass", func(t *testing.T) {
-			err := testConfigRead(b, reqStorage, map[string]interface{}{
+			err := testConfigRead(b, reqStorage, map[string]any{
 				"hostname":   hostname,
 				"account_id": "acc-abcabc",
 			})
@@ -97,14 +97,14 @@ func TestConfig(t *testing.T) {
 		})
 
 		t.Run("Update Configuration - set hostname - pass", func(t *testing.T) {
-			err := testConfigUpdate(b, reqStorage, map[string]interface{}{
+			err := testConfigUpdate(b, reqStorage, map[string]any{
 				"hostname": "https://example2.scalr.io",
 			})
 			assert.NoError(t, err)
 		})
 
 		t.Run("Read Updated Configuration - set hostname - pass", func(t *testing.T) {
-			err := testConfigRead(b, reqStorage, map[string]interface{}{
+			err := testConfigRead(b, reqStorage, map[string]any{
 				"hostname":   "https://example2.scalr.io",
 				"account_id": "acc-abcabc",
 			})
@@ -118,7 +118,7 @@ func TestConfig(t *testing.T) {
 	})
 }
 
-func testConfigCreate(b logical.Backend, s logical.Storage, d map[string]interface{}) error {
+func testConfigCreate(b logical.Backend, s logical.Storage, d map[string]any) error {
 	resp, err := b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.CreateOperation,
 		Path:      configStoragePath,
@@ -151,7 +151,7 @@ func testConfigDelete(b logical.Backend, s logical.Storage) error {
 	return nil
 }
 
-func testConfigUpdate(b logical.Backend, s logical.Storage, d map[string]interface{}) error {
+func testConfigUpdate(b logical.Backend, s logical.Storage, d map[string]any) error {
 	resp, err := b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.UpdateOperation,
 		Path:      configStoragePath,
@@ -168,7 +168,7 @@ func testConfigUpdate(b logical.Backend, s logical.Storage, d map[string]interfa
 	return nil
 }
 
-func testConfigRead(b logical.Backend, s logical.Storage, expected map[string]interface{}) error {
+func testConfigRead(b logical.Backend, s logical.Storage, expected map[string]any) error {
 	resp, err := b.HandleRequest(context.Background(), &logical.Request{
 		Operation: logical.ReadOperation,
 		Path:      configStoragePath,

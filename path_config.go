@@ -92,7 +92,7 @@ func (b *scalrBackend) pathConfigRead(ctx context.Context, req *logical.Request,
 	}
 
 	return &logical.Response{
-		Data: map[string]interface{}{
+		Data: map[string]any{
 			"hostname":   config.Hostname,
 			"account_id": config.AccountID,
 		},
